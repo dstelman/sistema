@@ -19,7 +19,9 @@ def redis_insert(ip, dicionario):
     return "ok"
 
 count = {"control":0}
-
+# data_ok e data_nok sao diferentes no hard_timeout. O data_nok deixa o fluxo na tabela por 60 segundos. Pode ser utilizado em um futuro para a aplicacao de Threat Intelligence no sistema.
+# o hard_timeout pode ser variavel dependendo do peso do IP em funcao de requisições pregressas.
+# nesse trabalho e utilizado para caso o fluxo nao seja confirmado pela aplicacao web, o mesmo some sozinho da tabela sem a necessidade de remocao pelo sistema posteriormente.
 data_ok = {
     "dpid":"",
     "cookie":1,
