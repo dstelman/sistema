@@ -5,7 +5,7 @@ import requests
 import logging
 import time
 
-# o redis esta instalado localmente
+# redis is installed locally
 conn = redis.Redis('127.0.0.1')
 
 lista_app = ["x", "192.168.0.70", "192.168.0.200", "x", "192.168.0.201", "192.168.0.202","192.168.0.203","192.168.0.204", "192.168.0.205"]
@@ -46,8 +46,8 @@ def deleta_fluxo(ip, ctrl):
     
 def bloqueia_em_todos(ip):
     data_block["match"]["nw_src"] = ip
-    # esse for controla quantos controladores sao usados. Utilizado apenas para bloquear o acesso para o ovs de entrada. Os outros OVSs apenas nao terao o fluxo por conta do hard_timeout = 60 sem confirmacao.
-    # funcao ja preparada para trabalhar com todos os ovs caso necessario.
+    # this "for" controls how many controllers are used. Used only to block access to inbound ovs. The other OVSs just won't stream because of hard_timeout = 60 without confirmation.
+    # function already prepared to work with all ovs if necessary.
     for x in [1]:
         if x == 1:
             data_block["match"]["nw_dst"] = "192.168.0.58"
@@ -61,7 +61,7 @@ def bloqueia_em_todos(ip):
     return "OK"
 
 while True:
-    #os registros morrem em 30 segundos no redis.
+    #logs are cleared every 30 seconds on redis.
     time.sleep(10)
     keys = conn.keys()
     values = conn.mget(keys)
@@ -72,10 +72,10 @@ while True:
 	    old = str(x[1].split("_")[2])
             delta = tempo - float(old) 
             if delta > 20:
-                #deletando no controlador escrito previamente
+                #deleting in previously written controller
                 out = deleta_fluxo(x[0],x[1])
-                conn.set(x[0],'2') # Ja alterando o status
-                #bloqueando em todos os controladores
+                conn.set(x[0],'2') # Already changing status
+                #blocking on all controllers
                 out = bloqueia_em_todos(x[0])
         else:
             continue

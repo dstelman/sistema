@@ -10,7 +10,7 @@ app = Flask(__name__)
 conn = redis.Redis('127.0.0.1')
 
 def redis_consult(ip):
-	#consultando o IP no status
+	#Querying the IP in the status
     return conn.get(ip)
 
 def redis_insert(ip, id_control):
@@ -34,7 +34,7 @@ lista_app = ["x", "192.168.0.70", "192.168.0.200", "x", "192.168.0.201", "192.16
 
 lista_controladores_vpn = ["x", "192.168.56.102", "192.168.56.106", "x", "192.168.56.108", "192.168.56.109", "192.168.56.117", "192.168.56.121", "192.168.56.119"]
 
-# recebe as confirmacoes da app web e atualiza com um fluxo definitivo o ovs desejado.
+# receives the information from the application web and updates the desired ovs with a definitive flow.
 @app.route('/<ip>')
 def start(ip):
     resultado = redis_consult(ip)

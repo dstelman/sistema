@@ -51,7 +51,7 @@ def myNetwork():
 	exec("h%s.cmd('sysctl -w net.ipv4.ip_forward=1')" % x)
     
     info( '*** Add links\in')
-    # h1 sera ligado no s2 para fazer o nat com h2 que tera a app funcionando do outro lado (s1)
+    # h1 will be connected to s2 through NAT with h2 which will have the app working on the other side (s1)
     Link(h1, s2, intfName1='h1-eth0')
     exec("net.addLink(s3, h1, bw=1000, delay='1ms', loss=0, use_htb=True)")
     h1.cmd('ifconfig h1-eth1 0.0.0.0 netmask 0.0.0.0.0')
@@ -144,7 +144,7 @@ def myNetwork():
     
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_src=192.168.0.68/32,actions=NORMAL')
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_dst=192.168.0.68/32,actions=NORMAL')
-    #Esses fluxos permissivos sao para simular a internet. O cliente chega no h1 mas s2 que dira se passa ou nao.
+    #These permissive flows are to simulate the internet. The client comes to h1 but s2 will "say" if it happens or not.
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_dst=192.168.0.200/32,actions=NORMAL')
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_src=192.168.0.200/32,actions=NORMAL')
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_src=192.168.0.201/32,actions=NORMAL')
@@ -157,10 +157,10 @@ def myNetwork():
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_dst=192.168.0.204/32,actions=NORMAL')
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_src=192.168.0.205/32,actions=NORMAL')
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_dst=192.168.0.205/32,actions=NORMAL')
-    # Fluxo entre app e banco
+    # Flow between APP and DataBase.
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_src=192.168.0.70/32,nw_dst=192.168.0.6/32,actions=NORMAL')
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_src=192.168.0.6/32,nw_dst=192.168.0.70/32,actions=NORMAL')
-    #Fluxo para resposta da Aplicacao web
+    # Flow between Web Application answer.
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=65000,nw_src=192.168.0.70/32,actions=NORMAL')
     s1.cmd('ovs-ofctl add-flow s1 arp,priority=1000,actions=NORMAL')
     s1.cmd('ovs-ofctl add-flow s1 ip,priority=100,actions=DROP')

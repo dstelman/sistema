@@ -7,11 +7,11 @@ import time
 
 app = Flask(__name__)
 
-#conexão com o armazenador
+#connection to the store
 conn = redis.Redis('192.168.56.105')
 
 def redis_consult(ip):
-	#consultando o IP no status
+	#querying the IP in the status
     return conn.get(ip)
 
 def redis_insert(ip, dicionario):
@@ -19,9 +19,9 @@ def redis_insert(ip, dicionario):
     return "ok"
 
 count = {"control":0}
-# data_ok e data_nok sao diferentes no hard_timeout. O data_nok deixa o fluxo na tabela por 60 segundos. Pode ser utilizado em um futuro para a aplicacao de Threat Intelligence no sistema.
-# o hard_timeout pode ser variavel dependendo do peso do IP em funcao de requisições pregressas.
-# nesse trabalho e utilizado para caso o fluxo nao seja confirmado pela aplicacao web, o mesmo some sozinho da tabela sem a necessidade de remocao pelo sistema posteriormente.
+# data_ok and data_nok are different in hard_timeout. data_nok leaves the stream in the table for 60 seconds. It may be used in the future to apply Threat Intelligence to the system.
+# the hard_timeout can be variable depending on the IP weight depending on previous requests.
+# in this work it is used in case the flow is not confirmed by the web application, it disappears by itself from the table without the need to remove it by the system later.
 data_ok = {
     "dpid":"",
     "cookie":1,
@@ -46,9 +46,9 @@ data_nok = {
     "actions":[{"type":"OUTPUT", "port":"normal"}]
 }
 
-#lista com os ips das aplicacoes dos outros ASs e do sistema local
+#list with the ips of the applications of the other ASs and of the local system
 lista_app = ["x", "192.168.0.70", "192.168.0.200", "x", "192.168.0.201", "192.168.0.202","192.168.0.203","192.168.0.204", "192.168.0.205"]
-#lista com os ips dos controladores de cada AS e do SL
+#list with the ips of the controllers of each AS and SL
 lista_controladores_vpn = ["x", "192.168.56.102", "192.168.56.106", "x", "192.168.56.108", "192.168.56.109", "192.168.56.117", "192.168.56.121", "192.168.56.119"]
 
 @app.route('/')
@@ -59,7 +59,7 @@ def start():
         dicionario = {"id":"", "ip_app":""}
         if count["control"] == 0:
             dicionario= {"id":1, "ip_app":"192.168.0.70"}
-            # para simular com o sistema sem colaboracao basta fixar count["control"] = 0
+            #to simulate with the system without collaboration just set count["control"] = 0
             count["control"] = 1
         elif count["control"] == 1:
             dicionario = {"id":2, "ip_app":"192.168.0.200"}

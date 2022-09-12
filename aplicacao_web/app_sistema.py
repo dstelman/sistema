@@ -8,10 +8,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    # caso seja necessario testar a aplicacao sem a comunicacao com o armazenador (sem sistema), basta comentar as linhas 12 e 13.
+    # If it is necessary to test the application without communicating with the store (without the system), just comment on lines 12 and 13.
 	ip = request.args.get('client')
 	out = requests.get("http://192.168.0.6/%s" % ip)
-    # A funcao random foi utilizada para evitar algum tipo de cache do sistema. Toda requisicao recebera uma resposta diferente porem com o mesmo tamanho.
+    # The random function was used to avoid some kind of system cache. Every request will receive a different response but with the same size.
 	valor = random.randrange(100000,1100000)
 	return (9000 * ("%s" % valor))
 
